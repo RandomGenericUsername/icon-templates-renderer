@@ -2,7 +2,7 @@
 id: OPS-002
 title: "Prove itr's own side of the CLI invocation contract in the test suite and CI"
 kind: ops-task
-status: in-progress
+status: done
 lane: direct
 links:
   openspec: none
@@ -63,8 +63,36 @@ slice is merged to `main` with the ticket closed.
 
 ## Evidence
 
-Evidence is recorded in the closeout commit once the gates and CI runs exist.
+| Claim | Command | Observed |
+| --- | --- | --- |
+| main clean before work | `git status --porcelain` on `main` | empty; `main` = `origin/main` = `7fb51e9` |
+| worktree + branch | `bash scripts/worktree-guard.sh create OPS-002 contract-conformance-test` | exit 0; `worktree=.worktrees/OPS-002/`, `branch=ticket/OPS-002-contract-conformance-test` |
+| record read from the pinned kit | `uv run python -c "from cli_invocation_contract import CONTRACT_VERSION, DATA_VERSION, get; …"` | `0.2.0 2`; argv `['render', '{mappings_file}?']`; required `['ICON_RENDERER__OUTPUT__OUTPUT_DIR', 'ICON_RENDERER__COLOR_SCHEME__PATH', 'ICON_RENDERER__TEMPLATES__DIR']`; artifacts `suffix`/recursive/`.svg`/`min_count 1` |
+| local contract run (CI-shaped env) | `GITHUB_ACTIONS=true FORCE_COLOR=1 COLUMNS=40 uv run pytest tests/contract -q` | exit 0; `1 passed in 0.74s` |
+| assertions are live (negative proof) | mutated record: argv `render --not-a-real-flag {mappings_file}?` → `assert_cli_writes_artifacts` | `AssertionError: itr: invocation exited 2; a zero exit is required before artifacts count` |
+| required-key drift fails loudly | mutated record: `env.required += ["ICON_RENDERER__NEW_KEY"]` → `_env` | `AssertionError: record requires ['ICON_RENDERER__NEW_KEY'] but does not inject them; this test must supply those values before running the CLI` |
+| gates | `make gates` | exit 0; `290 passed` (test), `All checks passed!` (lint), `290 passed` (hermetic), `Resolved 26 packages` (lock-check), docs-check silent |
+| workflow ↔ Makefile parity | `make ci-gates-parity` | exit 0; `PASS gates=['docs-check', 'hermetic', 'lint', 'lock-check', 'test'] jobs=['ci-gates-parity', 'docs-check', 'hermetic', 'lint', 'lock-check', 'release', 'test'] exempt=['ci-gates-parity', 'release']` |
+| packaging | `uv build` | exit 0; `dist/icon_templates_renderer-0.2.0.tar.gz` + `dist/icon_templates_renderer-0.2.0-py3-none-any.whl` |
+| CI on `3629441` (`main`) | `gh run view 39666028808 --json status,conclusion,jobs` | `completed` / `success`; `test`, `lint`, `hermetic`, `lock-check`, `docs-check`, `ci-gates-parity` all `success`; `release` skipped (tag-only) |
+| the contract step really ran in CI | `gh run view 39666028808 --log \| grep -E "tests/contract\|passed"` | `Run uv run pytest tests/contract -q -rs` → `1 passed in 0.38s`; `Run make test` → `290 passed in 5.24s`; `hermetic` → `290 passed in 7.66s` |
 
 ## Deviations
 
-To be recorded in the closeout commit (`MISSING` if none).
+1. **The ticket and `INDEX.md` landed on the ticket branch, not on `main` first** (unlike OPS-001):
+   `scripts/worktree-guard.sh create` refuses a dirty tree, so the ticket was written inside the
+   worktree and the planning commit (`fbaf7fb`) is part of the merged branch. `main` never held an
+   uncommitted planning edit.
+2. **The contract step is a named CI step *and* runs again inside `make test`/`make hermetic`**
+   (`testpaths = ["tests"]`). The duplicate execution is deliberate: the named step attributes a
+   contract drift directly, while `make test` keeps the local/CI gate sets identical.
+3. **No version bump / tag.** Tests and CI only; no package, CLI or contract surface changed, so
+   the release ritual (AGENTS.md §6) does not apply.
+
+## Closeout
+
+Closed 2026-10-21. Three commits on `main`: `fbaf7fb` (ticket + INDEX), `3629441`
+(`tests/contract/test_invocation_contract.py` + the `test` job step) and `c29636a` (this
+closeout). CI run `39666028808` on the code commit `3629441` is `success` and its contract step
+reports `1 passed`. No OpenSpec change and no tag — see "No OpenSpec change" / "No version bump /
+tag" above.

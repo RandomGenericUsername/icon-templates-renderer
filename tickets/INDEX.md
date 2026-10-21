@@ -18,7 +18,7 @@
 
 ## Ops tasks
 
-- [OPS-002-contract-conformance-test](./OPS-002-contract-conformance-test/ticket.md) — Prove itr's own side of the CLI invocation contract in the test suite and CI | `in-progress` | openspec: none (test-only slice)
+(none)
 
 ## Spikes
 
@@ -32,3 +32,4 @@
 
 - [REQ-001-repo-birth](./REQ-001-repo-birth/ticket.md) — Birth the icon-templates-renderer repo (mu-strict, `itr`) and cut v0.1.0 | `done` | openspec: repo-birth (archived 2026-10-21 → `openspec/changes/archive/2026-10-21-repo-birth`)
 - [OPS-001-contract-0-2-0](./OPS-001-contract-0-2-0/ticket.md) — Re-pin `cli-invocation-contract` (contracts) v0.2.0 and release `itr` v0.2.0 | `done` | openspec: none (pin + release bump, no capability change); tag `v0.2.0`
+- [OPS-002-contract-conformance-test](./OPS-002-contract-conformance-test/ticket.md) — Prove itr's own side of the CLI invocation contract in the test suite and CI | `done` | openspec: none (test-only slice)
