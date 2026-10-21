@@ -29,6 +29,11 @@ jobs:
           version: "0.9.22"
           enable-cache: true
       - run: make sync
+      # AD-4 conformance: runs the installed `itr` against the pinned record via
+      # cli_invocation_contract.testkit. Its own named step so a contract drift is
+      # attributed here, not buried in the suite (it also runs under `make test`/
+      # `make hermetic` through pytest's testpaths).
+      - run: uv run pytest tests/contract -q -rs
       - run: make test
 
   lint:
