@@ -20,7 +20,7 @@ itr --version
 ```
 
 - `--version` prints `<package version> contract <contracts version>`, e.g.
-  `0.1.0 contract 0.1.0`. The contract token comes from `cli_invocation_contract.CONTRACT_VERSION`,
+  `0.2.0 contract 0.2.0`. The contract token comes from `cli_invocation_contract.CONTRACT_VERSION`,
   not from `cli-output`.
 - Global flags: `--output-format {plain,rich,json}`, `-v/-vv/-vvv`, `-q`.
 - Exit codes: `0` success, `1` a domain/config error with the message on stderr.
@@ -54,15 +54,15 @@ As a consumer, pin an immutable tag — never a path and never a branch:
 
 ```toml
 # pyproject.toml
-dependencies = ["icon-templates-renderer>=0.1.0"]
+dependencies = ["icon-templates-renderer>=0.2.0"]
 
 [tool.uv.sources]
-icon-templates-renderer = { git = "https://github.com/RandomGenericUsername/icon-templates-renderer", tag = "v0.1.0" }
+icon-templates-renderer = { git = "https://github.com/RandomGenericUsername/icon-templates-renderer", tag = "v0.2.0" }
 ```
 
 ```bash
-uv tool install "git+https://github.com/RandomGenericUsername/icon-templates-renderer@v0.1.0"
-itr --version    # 0.1.0 contract 0.1.0
+uv tool install "git+https://github.com/RandomGenericUsername/icon-templates-renderer@v0.2.0"
+itr --version    # 0.2.0 contract 0.2.0
 ```
 
 A published tag is never moved or deleted; a fix ships as a new tag.
@@ -82,7 +82,7 @@ This repo consumes three sibling repos by immutable tag (spine AD-3):
 | --- | --- | --- |
 | `cli-output` | `v0.1.0` | `https://github.com/RandomGenericUsername/cli-output` |
 | `config-assembler-engine` | `v0.1.0` | `https://github.com/RandomGenericUsername/config-assembler-engine` |
-| `cli-invocation-contract` | `v0.1.0` | `https://github.com/RandomGenericUsername/contracts` |
+| `cli-invocation-contract` | `v0.2.0` | `https://github.com/RandomGenericUsername/contracts` |
 
 ## Release
 
