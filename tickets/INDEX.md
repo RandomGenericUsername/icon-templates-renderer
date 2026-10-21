@@ -18,7 +18,7 @@
 
 ## Ops tasks
 
-(none)
+- [OPS-001-contract-0-2-0](./OPS-001-contract-0-2-0/ticket.md) — Re-pin `cli-invocation-contract` (contracts) v0.2.0 and release `itr` v0.2.0 | `in-progress` | openspec: none (pin + release bump, no capability change)
 
 ## Spikes
 
