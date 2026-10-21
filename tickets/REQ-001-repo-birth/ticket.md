@@ -7,8 +7,8 @@ lane: 3
 links:
   openspec: repo-birth
   bmad: none
-worktree: none
-branch: none
+worktree: .worktrees/REQ-001/
+branch: ticket/REQ-001-closeout
 ---
 
 # Birth the icon-templates-renderer repo (mu-strict, itr) and cut v0.1.0
@@ -119,3 +119,24 @@ uses `bash scripts/worktree-guard.sh create <id> <slug>`.
 
 The remaining S4 steps live in `dotfiles-v3`: the `{name, repo, tag}` manifest entry, role/verify
 mirrors, `deploy-coverage` shape assertions, and the in-tree deletion.
+
+### Re-verified and archived 2026-10-21
+
+Re-ran the whole gate set before ticking anything, in the guard-created worktree
+`.worktrees/REQ-001/` on `ticket/REQ-001-closeout`, then archived the OpenSpec change so the
+ticket's last open link closes.
+
+| Claim | Command | Observed |
+| --- | --- | --- |
+| tree clean before work | `git status --porcelain` on `main` | empty; `main` = `d28de8c` = `origin/main` |
+| repo public, default `main` | `gh api repos/RandomGenericUsername/icon-templates-renderer --jq '{private,default_branch}'` | `{"default_branch":"main","private":false}` |
+| gate set green | `make gates` | exit 0; `288 passed` (test), `All checks passed!` (lint), `288 passed` (hermetic), lock current, docs-check ok |
+| workflow ↔ Makefile parity | `make ci-gates-parity` | exit 0; `PASS gates=['docs-check','hermetic','lint','lock-check','test'] jobs=[...] exempt=['ci-gates-parity','release']` |
+| packaging | `uv build` | exit 0; `icon_templates_renderer-0.1.0-py3-none-any.whl` + `icon_templates_renderer-0.1.0.tar.gz` |
+| tag install from the public URL | `UV_TOOL_DIR=… UV_TOOL_BIN_DIR=… uv tool install --force git+https://github.com/RandomGenericUsername/icon-templates-renderer@v0.1.0` → `itr --version` | exit 0; `0.1.0 contract 0.1.0` |
+| release carries both artifacts | `gh release view v0.1.0 --json assets` | `draft:false`; `icon_templates_renderer-0.1.0-py3-none-any.whl` (48954 B) + `icon_templates_renderer-0.1.0.tar.gz` (124251 B) — no upload needed |
+| recent CI runs green | `gh run list -R … --limit 3 --json status,conclusion` | `d28de8c`/`92895a0` (main) and `92895a0` (`v0.1.0`) all `completed`/`success` |
+| change valid before archive | `openspec validate repo-birth --strict` | `Change 'repo-birth' is valid` |
+| change archived | `openspec archive repo-birth -y` | `Change 'repo-birth' archived as '2026-10-21-repo-birth'`; specs `+4` → `repo-harness` created |
+| specs valid after archive | `openspec validate --specs --strict` | `4 passed, 0 failed` (after writing the `repo-harness` Purpose the archive leaves as `TBD`) |
+| no active changes left | `openspec list --json` | `{"changes":[]}` |

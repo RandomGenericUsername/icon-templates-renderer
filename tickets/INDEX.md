@@ -30,4 +30,4 @@
 
 ## Done (links only, newest last)
 
-- [REQ-001-repo-birth](./REQ-001-repo-birth/ticket.md) — Birth the icon-templates-renderer repo (mu-strict, `itr`) and cut v0.1.0 | `done` | openspec: repo-birth (open; closes when the change is archived)
+- [REQ-001-repo-birth](./REQ-001-repo-birth/ticket.md) — Birth the icon-templates-renderer repo (mu-strict, `itr`) and cut v0.1.0 | `done` | openspec: repo-birth (archived 2026-10-21 → `openspec/changes/archive/2026-10-21-repo-birth`)
