@@ -91,8 +91,8 @@ slice is merged to `main` with the ticket closed.
 
 ## Closeout
 
-Closed 2026-10-21. Three commits on `main`: `fbaf7fb` (ticket + INDEX), `3629441`
-(`tests/contract/test_invocation_contract.py` + the `test` job step) and `c29636a` (this
-closeout). CI run `39666028808` on the code commit `3629441` is `success` and its contract step
-reports `1 passed`. No OpenSpec change and no tag — see "No OpenSpec change" / "No version bump /
-tag" above.
+Closed 2026-10-21. Two work commits on `main` — `fbaf7fb` (ticket + INDEX) and `3629441`
+(`tests/contract/test_invocation_contract.py` + the `test` job step) — followed by docs-only
+closeout commits. CI run `39666028808` on the code commit `3629441` is `success` and its contract
+step reports `1 passed`. No OpenSpec change and no tag — see "No OpenSpec change" / "No version
+bump / tag" above.
