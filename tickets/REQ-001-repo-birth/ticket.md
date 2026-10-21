@@ -39,7 +39,9 @@ repo.
 - [x] `tickets/INDEX.md` lists this ticket with the same status as the frontmatter, and the
   OpenSpec change validates strictly.
   Verify: `openspec validate --specs --strict` → exit 0; `openspec validate repo-birth --strict`
-  → exit 0.
+  → exit 0 **before** the change is archived (after `openspec archive repo-birth` on 2026-10-21
+  the name resolves only as `openspec/changes/archive/2026-10-21-repo-birth`, so the reproducible
+  check is `openspec validate --specs --strict` → `4 passed`).
 - [x] A fresh clone passes `make sync && make gates && make build` and the suite count is 288.
   Verify: `uv sync --frozen && uv run pytest -q` → `288 passed`; `make gates` → exit 0;
   `ls dist/icon_templates_renderer-0.1.0-*` → wheel + sdist.
