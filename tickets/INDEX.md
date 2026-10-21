@@ -18,7 +18,7 @@
 
 ## Ops tasks
 
-(none)
+- [OPS-002-contract-conformance-test](./OPS-002-contract-conformance-test/ticket.md) — Prove itr's own side of the CLI invocation contract in the test suite and CI | `in-progress` | openspec: none (test-only slice)
 
 ## Spikes
 
