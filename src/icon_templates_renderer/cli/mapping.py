@@ -4,6 +4,8 @@ from pathlib import Path
 
 import typer
 
+from icon_templates_renderer.adapters.icon_renderer import IconRenderer
+from icon_templates_renderer.adapters.ruamel_mapping_writer import RuamelMappingWriter
 from icon_templates_renderer.cli._helpers import resolve_roots, to_optional_path
 from icon_templates_renderer.cli.options import (
     COLOR_SCHEME_OPT,
@@ -18,8 +20,6 @@ from icon_templates_renderer.cli.options import (
     UNSAFE_OPT,
     VARIANT_OPT,
 )
-from icon_templates_renderer.adapters.icon_renderer import IconRenderer
-from icon_templates_renderer.adapters.ruamel_mapping_writer import RuamelMappingWriter
 from icon_templates_renderer.domain.exceptions import IconRendererError
 from icon_templates_renderer.domain.models import (
     MappingSetDefaultRequest,

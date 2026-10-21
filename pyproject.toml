@@ -1,33 +1,48 @@
 [project]
 name = "icon-templates-renderer"
 version = "0.1.0"
-description = "SVG icon template renderer for color schemes"
+description = "SVG icon template renderer (itr) for the dotfiles CLI toolchain"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.14"
 dependencies = [
     "typer>=0.12",
-    "cli-invocation-contract",
-    "config-assembler-engine",
-    "cli-output",
+    "cli-invocation-contract>=0.1.0",
+    "config-assembler-engine>=0.1.0",
+    "cli-output>=0.1.0",
     "pydantic>=2.0",
     "pyyaml>=6.0",
     "ruamel.yaml>=0.18",
     "rich>=13.0",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Typing :: Typed",
 ]
 
 [project.scripts]
 itr = "icon_templates_renderer.cli.main:app"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
-
-[tool.hatch.build]
-include = [
-    "src/icon_templates_renderer/**",
-]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/icon_templates_renderer"]
+
+# The harness trees (.agents/, _bmad/, .opencode/, openspec/, tickets/) are not
+# package content; keep them out of the sdist.
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "pyproject.toml",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "src/icon_templates_renderer",
+    "tests",
+    "docs",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -52,5 +67,7 @@ quote-style = "double"
 
 [dependency-groups]
 dev = [
-    "pytest>=9.1.1",
+    "pytest>=8.0",
+    "pytest-cov>=7.0",
+    "ruff>=0.15.17",
 ]

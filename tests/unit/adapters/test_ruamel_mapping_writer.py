@@ -130,7 +130,11 @@ class TestAddVariant:
         path = tmp_path / "icons.yaml"
         path.write_text(_manifest(), encoding="utf-8")
         new_text = RuamelMappingWriter().add_variant(
-            path, "screenshot-tool", "cursor", "screenshot-tool/cursor/default/cursor.svg", "cursor.svg"
+            path,
+            "screenshot-tool",
+            "cursor",
+            "screenshot-tool/cursor/default/cursor.svg",
+            "cursor.svg",
         )
         import yaml
 

@@ -45,11 +45,14 @@ def _analyze_json(path: Path) -> dict:
     return json.loads(result.stdout)
 
 
-def _worktree_root() -> Path:
-    p = Path(__file__).resolve().parent
-    while not (p / "dotfiles").exists() and p != p.parent:
-        p = p.parent
-    return p
+def _templates_root() -> Path:
+    """The sample template tree vendored under ``tests/fixtures``.
+
+    The real templates are a ``dotfiles-v3`` provisioning asset (spine AD-10);
+    this repo may not read another repo's checkout, so the suite carries a copy
+    as test input and never treats it as the asset's source of truth.
+    """
+    return Path(__file__).resolve().parent / "fixtures" / "icon-templates"
 
 
 def _expected_after_set(body: str, shape: dict) -> str:
@@ -141,7 +144,7 @@ class TestSetPlaceholderIntegration:
 
 class TestRoundTripRealTemplates:
     def test_all_templates_round_trip(self, cli_deps, tmp_path: Path) -> None:
-        template_root = _worktree_root() / "dotfiles" / "assets" / "icon-templates"
+        template_root = _templates_root()
         assert template_root.exists(), f"template root missing: {template_root}"
         svgs = sorted(template_root.rglob("*.svg"))
         assert svgs, "no templates found"
@@ -200,7 +203,7 @@ class TestRoundTripRealTemplates:
 
 class TestScanIntegration:
     def test_scan_classifies_all_real_templates(self) -> None:
-        root = _worktree_root() / "dotfiles" / "assets" / "icon-templates"
+        root = _templates_root()
         result = CliRunner().invoke(app, ["template", "scan", str(root), "--json"])
         assert result.exit_code == 0, result.stderr
         payload = json.loads(result.stdout)
